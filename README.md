@@ -5,7 +5,7 @@ For more information on sorce see https://osmocom.org/projects/osmo-fl2k/wiki
 
 We use the Fl2k adapter to be able to transmit independently on all three DAC channels of the Fl2k adapter while the original project only uses the Red-Channel. 
 
-![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/gnuradio_to_fl2k_file2.jpg)
+![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/vga.jpg)
 
 The original project fork was primarily used for playing TBC files, see https://github.com/vrunk11/fl2k_2
 
