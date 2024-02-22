@@ -120,9 +120,9 @@ Support yet to be Implimented.
 
 # Usage
 
-As its an VGA R-G-B adapter so there is 3 ADC's
+As its an VGA R-G-B adapter so there is 3 DAC's
 
-To play a file on an ADC channel you do -R for red -G for green and -B for blue
+To play a file on an DAC channel you do -R for red -G for green and -B for blue
 
 For the Samplerate/TV System you can do `-s ntsc` or `-s pal`
 
