@@ -32,6 +32,7 @@ Install the libusb headers if not already present
 `make -j 3`
 
 `cd src`
+
 `sudo cp fl2k_* /usr/local/bin`
 
 Before being able to use the device as a non-root user, the udev rules need to be reloaded:
