@@ -1,79 +1,15 @@
 FL2K_2 : a fork of the osmo_fl2K project.
 
-Turns FL2000-based USB 3.0 to VGA adapters into low cost DACs.
-
+Turns FL2000-based USB 3.0 to VGA adapters into low cost SDR-DACs. 
 For more information on sorce see https://osmocom.org/projects/osmo-fl2k/wiki
 
-This project fork is primarily for use with playing TBC files the following is for that use case.
-but it can also be used as a remplacement of the osmos-fl2K thanks to all the new QOL feature added.
+We use the Fl2k adapter to be able to transmit independently on all three DAC channels of the Fl2k adapter while the original project only uses the Red-Channel. 
 
-# FL2K TBC Player
+![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/gnuradio_to_fl2k_file2.jpg)
 
-A Simple TBC playback utility, currently only CLI (Command Line Interface)
-
-This will later be both GUI/CLI.
-
-## What is a TBC?
-
-Its a digital Time Base Corrected lossless 16-bit video file thats in 1 file for Composite streams and 2 files for S-Video streams.
-
-## How do I get a TBC file?
-
-Via [VHS-Decode](https://github.com/oyvindln/vhs-decode) (Tape Decoding) and [LD-Decode](https://github.com/happycube/ld-decode) (LaserDisk Decoding) or [CVBS-Decode](https://github.com/oyvindln/vhs-decode/wiki/CVBS-Composite-Decode) (Composite Decoding)
-
-### You can also genarate an TBC file from normal video using [ld-chroma-encoder](https://github.com/happycube/ld-decode/wiki/ld-chroma-encoder)
-
-## Ware you can buy the FL2K and adapters
-
-The FL2K [Link 1](https://www.aliexpress.com/item/1005002872152601.html?) / [Link 2](https://www.reichelt.de/de/de/adapterkabel-usb-3-0-stecker-vga-buchse-schwarz-delock-62738-p287335.html)
-
-VGA to RCA [Aliexpress](https://www.aliexpress.com/item/1005002872152601.html?)
-
-VGA to BNC Male/Female [Amazon UK](https://www.amazon.co.uk/gp/product/B0033AF5Y0/) / [Amazon USA](https://www.amazon.com/s?k=VGA+to+BNC+Cable&crid=30JGI1TOFQ5I9&sprefix=vga+to+bnc+cable%2Caps%2C165&ref=nb_sb_noss_1)
+The original project fork was primarily used for playing TBC files, see https://github.com/vrunk11/fl2k_2
 
 # Setup
-
-## Standardised Cable Config
-
-### Composite
-
-Red - Right Audio
-
-Blue - Left Audio
-
-Green - Composite Video
-
-### S-Video
-
-Green - Lumanace Y
-
-Blue - Chroma C
-
-Red - Mono/Mono Mix Audio
-
-## Windows
-
-Download and install the stock driver [FL2000 Stock Driver](https://github.com/vrunk11/fl2k_2/fl2k_2/resources/FL2000-Driver-2.1.33676.0.exe)
-
-Then select and replace the driver with libusb-win32 (v1.2.6.0) using [Zagig Driver Tool](https://github.com/vrunk11/fl2k_2/fl2k_2/resources/zadig-2.7.exe)
-
-Simply download the latest [Windows Release](https://github.com/vrunk11/fl2k_2/releases).
-
-Decompress the .zip file.
-
-For GUI users
-
-Open the fl2k_2.bat file.
-
-For CLI users
-
-Open an CMD Window and then open the directory your files are in, copy the path and add cd to the start example:
-
-    cd C:\Users\harry\Desktop\fl2k
-
-Once inside use arguments as stated below example:
-
-    fl2k-2.exe -u -s pal -G16 -tbcG -G example.tbc
 
 ## Linux
 
@@ -83,14 +19,20 @@ Once inside use arguments as stated below example:
 
 Install the libusb headers if not already present
 
-`git clone https://gitea.osmocom.org/sdr/osmo-fl2k
-mkdir osmo-fl2k/build
-cd osmo-fl2k/build`
+`git clone https://github.com/BM45/fl2k_2_rgb`
 
-`cmake ../ -DINSTALL_UDEV_RULES=ON
-make -j 3
-sudo make install
-sudo ldconfig`
+`cd fl2k_2_rgb`
+
+`mkdir build`
+
+`cd build`
+
+`cmake ../ -DINSTALL_UDEV_RULES=ON`
+
+`make -j 3`
+
+`cd src`
+`sudo cp fl2k_* /usr/local/bin`
 
 Before being able to use the device as a non-root user, the udev rules need to be reloaded:
 
@@ -98,73 +40,37 @@ Before being able to use the device as a non-root user, the udev rules need to b
 
 `sudo udevadm trigger`
 
-### Download The Player
-
-`git clone https://github.com/vrunk11/fl2k_2/.git fl2k-tbc-player`
-
-To enter into the install directory use CD
-
-`cd fl2k-tbc-player`
-
-Compile the player with
-
-`sudo compile.sh`
-
-Run the software with
-
-`./fl2k_2 [arguments]`
-
-## MacOS
-
-Support yet to be Implimented.
-
 # Usage
 
-As its an VGA R-G-B adapter so there is 3 DAC's
+As its an VGA R-G-B adapter so there are 3 DAC's
 
-To play a file on an DAC channel you do -R for red -G for green and -B for blue
+To transmit on all 3 DACs, you'll first need to create broadcast files for each channel using a tool like GNU Radio.
 
-For the Samplerate/TV System you can do `-s ntsc` or `-s pal`
+![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/gnuradio_to_fl2k_file2.jpg)
 
-Currently to make tbc playback possible you need to do the 16 to 8 bit conversion with:
+All files must have the same samplerate! 
 
--R16 for red -G16 for green -B16 for blue
+Examples:
 
-Also needed is removal of the extra line on each frame:
+To send an RF broadcast file on the Red Channel:
 
--tbcR for red -tbcG for green -tbcB for blue
+`./fl2k_file2 -u -s 7777777 -R8 -R r_out.bin  -VmaxR 0.7 -not_tbcR`
 
-## Standard Oprational Commands
+To send an RF on Red and Blue Channel
 
-For windows just use fl2k_2.exe
+`./fl2k_file2 -u -s 7777777 -R8 -R r_out.bin  -VmaxR 0.7 -not_tbcR  -B8 -B b_out.bin -VmaxB 0.7 -not_tbcB`
 
-### Composite output on the red channel:
+To send RF on all 3 DACs
 
-Linux:
+`./fl2k_file2 -u -s 7777777 -R8 -R r_out.bin  -VmaxR 0.7 -not_tbcR  -G8 -G g_out.bin  -VmaxG 0.7 -not_tbcG -B8 -B b_out.bin -VmaxB 0.7 -not_tbcB`
 
-`./fl2k_2 -u -s ntsc -G16 -tbcG -G example.tbc`
-
-Windows:
-
-`fl2k_2.exe -u -s ntsc -G16 -tbcG -G example.tbc`
-
-### S-Video output with Luma on the green channel and Chroma on the blue channel:
-
-Linux:
-
-`./fl2k_2 -u -s pal -G16 -tbcG -G example.tbc -B16 -tbcB -B example_chroma.tbc`
-
-Windows:
-
-`fl2k_2.exe -u -s pal -G16 -tbcG -G example.tbc -B16 -tbcB -B example_chroma.tbc`
-
-# Commandlist
+# Commandlist and explanation
 
 `-d` device_index (default: 0)
 
 `-readMode` (default = 0) option : 0 = multit-threading (RGB) / 1 = hybrid (R --> GB) / 2 = hybrid (RG --> B) / 3 = sequential (R -> G -> B)
 
-`-s` samplerate (default: 100 MS/s) allows you to change TV System `-s ntsc` or `-s pal`
+`-s` samplerate (default: 100 MS/s) 
 
 `-u` Set sample type to unsigned
 
@@ -180,17 +86,23 @@ Windows:
 
 `-B16` (convert bits 16 to 8)
 
-`-tbcR` interpret R as tbc file
+`-not_tbcR` disable tbc processing for input R file
 
-`-tbcG` interpret G as tbc file
+`-not_tbcG` disable tbc processing for input G file
 
-`-tbcB` interpret B as tbc file
+`-not_tbcB` disable tbc processing for input B file
 
-`-CgainR` Control Chroma Gain Level (using color burst)
+`-VmaxR` maximum output voltage for channel R (0.003 to 0.7) (scale value) (disable Cgain and Sgain)
 
-`-CgainG` Control Chroma Gain Level (using color burst)
+`-VmaxG` maximum output voltage for channel G (0.003 to 0.7) (scale value) (disable Cgain and Sgain)
 
-`-CgainB` Control Chroma Gain Level (using color burst)
+`-VmaxB` maximum output voltage for channel B (0.003 to 0.7) (scale value) (disable Cgain and Sgain)
+
+`-MaxValueR` max value for channel R (1 to 255) (reference level) (used for Vmax)
+
+`-MaxValueG` max value for channel G (1 to 255) (reference level) (used for Vmax)
+
+`-MaxValueB` max value for channel B (1 to 255) (reference level) (used for Vmax)
 
 `-resample` resample the input to the correct output frequency (can fix color decoding on PAL signal)
 
