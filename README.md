@@ -5,7 +5,7 @@ For more information on sorce see https://osmocom.org/projects/osmo-fl2k/wiki
 
 We use the Fl2k adapter to be able to transmit independently on all three DAC channels of the Fl2k adapter while the original project only uses the Red-Channel. 
 
-![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/vga.jpg)
+![gnuradio](https://github.com/radiolab81/fl2k_2_rgb/blob/master/resources/vga.jpg)
 
 The original project fork was primarily used for playing TBC files, see https://github.com/vrunk11/fl2k_2
 
@@ -19,7 +19,7 @@ The original project fork was primarily used for playing TBC files, see https://
 
 Install the libusb headers if not already present
 
-`git clone https://github.com/BM45/fl2k_2_rgb`
+`git clone https://github.com/radiolab81/fl2k_2_rgb`
 
 `cd fl2k_2_rgb`
 
@@ -47,7 +47,7 @@ As its an VGA R-G-B adapter so there are 3 DAC's
 
 To transmit on all 3 DACs, you'll first need to create broadcast files for each channel using a tool like GNU Radio.
 
-![gnuradio](https://github.com/BM45/fl2k_2_rgb/blob/master/resources/gnuradio_to_fl2k_file2.jpg)
+![gnuradio](https://github.com/radiolab81/fl2k_2_rgb/blob/master/resources/gnuradio_to_fl2k_file2.jpg)
 
 All files must have the same samplerate! 
 
